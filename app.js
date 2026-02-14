@@ -19,19 +19,51 @@ const titleCase = (value) =>
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
 
-const getYouTubeId = (url) => {
-  const match = url.match(
-    /(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-  );
-  return match ? match[1] : null;
+const hashText = (text) => {
+  let hash = 0;
+  for (let i = 0; i < text.length; i += 1) {
+    hash = (hash * 31 + text.charCodeAt(i)) >>> 0;
+  }
+  return hash;
 };
 
-const getThumbnail = (item) => {
-  if (item.thumbnail) return item.thumbnail;
-  const youtubeId = getYouTubeId(item.url);
-  if (youtubeId) return `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`;
-  return `https://image.thum.io/get/width/720/crop/405/noanimate/${item.url}`;
+const hsl = (h, s, l) => `hsl(${h} ${s}% ${l}%)`;
+
+const makeTitleThumbnail = (title) => {
+  const seed = hashText(title);
+  const hueA = seed % 360;
+  const hueB = (seed * 7) % 360;
+  const hueC = (seed * 13) % 360;
+  const shortTitle = title.length > 28 ? `${title.slice(0, 28)}...` : title;
+
+  const circles = Array.from({ length: 9 }, (_, i) => {
+    const x = 70 + i * 78;
+    const y = i % 2 === 0 ? 140 : 230;
+    const r = 26 + (i % 3) * 5;
+    const hue = (hueC + i * 22) % 360;
+    return `<circle cx="${x}" cy="${y}" r="${r}" fill="${hsl(hue, 78, 56)}" opacity="0.95" />`;
+  }).join("");
+
+  const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="${hsl(hueA, 86, 88)}" />
+      <stop offset="100%" stop-color="${hsl(hueB, 80, 82)}" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)" />
+  ${circles}
+  <rect x="30" y="300" width="740" height="118" rx="16" fill="rgba(255,255,255,0.72)" />
+  <text x="50" y="352" fill="#1e1f24" font-family="Nunito, Arial, sans-serif" font-size="32" font-weight="800">
+    ${shortTitle.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}
+  </text>
+</svg>`;
+
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 };
+
+const getThumbnail = (item) => makeTitleThumbnail(item.title);
 
 const matchesQuery = (item, query) => {
   if (!query) return true;
