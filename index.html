@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ellie's Kandi Vault</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bungee:wght@400&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <p class="eyebrow">Bead Project Finder</p>
+        <h1>Ellie's Kandi Vault</h1>
+        <p class="subtitle">
+          A searchable collection of specific Kandi designs with direct tutorial or pattern links.
+        </p>
+        <p class="stamp" id="scrapedStamp"></p>
+      </header>
+
+      <section class="controls" aria-label="Search and filters">
+        <label class="search-wrap" for="searchInput">
+          <span>Search</span>
+          <input id="searchInput" type="search" placeholder="Try: flower cuff, mask, beginner, x-base" />
+        </label>
+
+        <label for="typeFilter">
+          <span>Type</span>
+          <select id="typeFilter">
+            <option value="all">All</option>
+            <option value="guide">Step-by-step guide</option>
+            <option value="video">Video tutorial</option>
+            <option value="pattern">Pattern page</option>
+          </select>
+        </label>
+
+        <label for="levelFilter">
+          <span>Skill</span>
+          <select id="levelFilter">
+            <option value="all">All</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+            
+          </select>
+        </label>
+      </section>
+
+      <section>
+        <p class="result-count" id="resultCount"></p>
+        <div id="cardGrid" class="card-grid" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <template id="cardTemplate">
+      <article class="card">
+        <div class="thumb-wrap">
+          <img class="thumb" loading="lazy" alt="" />
+        </div>
+        <div class="card-top">
+          <span class="pill type"></span>
+          <span class="pill level"></span>
+        </div>
+        <h2></h2>
+        <p class="meta"></p>
+        <p class="summary"></p>
+        <p class="tags"></p>
+        <a class="open-link" target="_blank" rel="noopener noreferrer">Open</a>
+      </article>
+    </template>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
