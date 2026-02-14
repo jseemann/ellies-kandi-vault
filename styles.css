@@ -37,6 +37,32 @@ body {
   font-size: clamp(2rem, 4vw, 3.2rem);
 }
 
+.hero-name {
+  display: inline-block;
+  font-size: clamp(2.3rem, 5vw, 4rem);
+  color: #d7263d;
+  text-shadow: 2px 2px 0 #ffd166;
+  margin-right: 0.2rem;
+}
+
+.ellie-signature {
+  position: fixed;
+  left: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  font-family: "Bungee", sans-serif;
+  font-size: clamp(1.5rem, 2.1vw, 2.2rem);
+  letter-spacing: 0.09em;
+  color: #d7263d;
+  background: #fff0cf;
+  border: 3px solid #ff9f43;
+  border-radius: 16px;
+  padding: 0.7rem 0.35rem;
+  box-shadow: 0 8px 16px rgba(30, 31, 36, 0.14);
+  z-index: 30;
+}
+
 .eyebrow {
   font-weight: 800;
   color: var(--accent);
@@ -182,6 +208,21 @@ select:focus {
 }
 
 @media (max-width: 740px) {
+  .page {
+    padding-top: 4.5rem;
+  }
+
+  .ellie-signature {
+    writing-mode: horizontal-tb;
+    transform: none;
+    top: 0.6rem;
+    left: 50%;
+    translate: -50% 0;
+    font-size: 1.2rem;
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+  }
+
   .controls {
     grid-template-columns: 1fr;
   }
