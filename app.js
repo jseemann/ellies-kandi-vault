@@ -149,6 +149,22 @@ const makeTitleThumbnail = (title) => {
 
 const getThumbnail = (item) => makeTitleThumbnail(item.title);
 
+const extractYouTubeId = (url) => {
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname.includes("youtu.be")) return parsed.pathname.slice(1);
+    return parsed.searchParams.get("v");
+  } catch {
+    return null;
+  }
+};
+
+const getLocalVideoSrc = (item) => {
+  if (item.type !== "video" || !/youtube/i.test(item.source)) return null;
+  const id = extractYouTubeId(item.url);
+  return id ? `videos/${id}.mp4` : null;
+};
+
 const matchesQuery = (item, query) => {
   if (!query) return true;
   const blob = [item.title, item.source, item.summary, item.level, item.type, item.tags.join(" ")]
@@ -182,6 +198,22 @@ const renderCards = () => {
     thumb.addEventListener("error", () => {
       thumb.src = fallbackThumb;
     });
+
+    const video = node.querySelector(".local-video");
+    const localSrc = getLocalVideoSrc(item);
+    if (localSrc) {
+      video.addEventListener(
+        "loadedmetadata",
+        () => {
+          video.style.display = "block";
+          thumb.style.display = "none";
+        },
+        { once: true }
+      );
+      video.src = localSrc;
+    } else {
+      video.remove();
+    }
 
     node.querySelector("h2").textContent = item.title;
     node.querySelector(".pill.type").textContent = titleCase(item.type);
